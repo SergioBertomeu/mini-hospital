@@ -49,6 +49,18 @@ public class Main {
                 case 9:
                     reprogramarCitaPorId();
                     break;
+                case 10:
+                    actualizarPaciente();
+                    break;
+                case 11:
+                    eliminarPaciente();
+                    break;
+                case 12:
+                    actualizarMedico();
+                    break;
+                case 13:
+                    eliminarMedico();
+                    break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
                     break;
@@ -72,6 +84,10 @@ public class Main {
         System.out.println("7. Buscar citas por DNI de paciente");
         System.out.println("8. Cancelar cita por ID");
         System.out.println("9. Reprogramar cita por ID");
+        System.out.println("10. Actualizar paciente");
+        System.out.println("11. Eliminar paciente");
+        System.out.println("12. Actualizar medico");
+        System.out.println("13. Eliminar medico");
         System.out.println("0. Salir");
         System.out.println("==============================");
     }
@@ -267,6 +283,43 @@ public class Main {
         LocalDateTime nuevaFecha = leerFechaValida();
 
         ResultadoOperacion resultado = hospitalService.reprogramarCitaPorId(id, nuevaFecha);
+        System.out.println(resultado.getMensaje());
+    }
+
+    public static void actualizarPaciente() {
+        String dni = leerTextoNoVacio("DNI del paciente a actualizar: ");
+        String nuevoNombre = leerTextoNoVacio("Nuevo nombre: ");
+        int nuevaEdad = leerEdadValida();
+
+        ResultadoOperacion resultado = hospitalService.actualizarPaciente(dni, nuevoNombre, nuevaEdad);
+        System.out.println(resultado.getMensaje());
+    }
+
+    public static void eliminarPaciente() {
+        String dni = leerTextoNoVacio("DNI del paciente a eliminar: ");
+
+        ResultadoOperacion resultado = hospitalService.eliminarPacientePorDni(dni);
+        System.out.println(resultado.getMensaje());
+    }
+
+    public static void actualizarMedico() {
+        String numeroColegiado = leerTextoNoVacio("Numero colegiado del medico a actualizar: ");
+        String nuevoNombre = leerTextoNoVacio("Nuevo nombre: ");
+        String nuevaEspecialidad = leerTextoNoVacio("Nueva especialidad: ");
+
+        ResultadoOperacion resultado = hospitalService.actualizarMedico(
+                numeroColegiado,
+                nuevoNombre,
+                nuevaEspecialidad
+        );
+
+        System.out.println(resultado.getMensaje());
+    }
+
+    public static void eliminarMedico() {
+        String numeroColegiado = leerTextoNoVacio("Numero colegiado del medico a eliminar: ");
+
+        ResultadoOperacion resultado = hospitalService.eliminarMedicoPorNumeroColegiado(numeroColegiado);
         System.out.println(resultado.getMensaje());
     }
 }

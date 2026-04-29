@@ -270,4 +270,87 @@ public class HospitalService {
             return new ArrayList<>();
         }
     }
+
+    public ResultadoOperacion actualizarPaciente(String dni, String nuevoNombre, int nuevaEdad) {
+        try {
+            Paciente paciente = pacienteRepository.buscarPorDni(dni);
+
+            if (paciente == null) {
+                return new ResultadoOperacion(false, "No existe un paciente con ese DNI.");
+            }
+
+            Paciente pacienteActualizado = new Paciente(nuevoNombre, dni, nuevaEdad);
+            pacienteRepository.actualizar(pacienteActualizado);
+
+            return new ResultadoOperacion(true, "Paciente actualizado correctamente.");
+
+        } catch (SQLException e) {
+            return new ResultadoOperacion(false, "Error al actualizar paciente: " + e.getMessage());
+        }
+    }
+
+    public ResultadoOperacion eliminarPacientePorDni(String dni) {
+        try {
+            Paciente paciente = pacienteRepository.buscarPorDni(dni);
+
+            if (paciente == null) {
+                return new ResultadoOperacion(false, "No existe un paciente con ese DNI.");
+            }
+
+            List<Cita> citasPaciente = citaRepository.buscarPorDniPaciente(dni);
+
+            if (!citasPaciente.isEmpty()) {
+                return new ResultadoOperacion(false, "No se puede eliminar el paciente porque tiene citas registradas.");
+            }
+
+            pacienteRepository.eliminarPorDni(dni);
+
+            return new ResultadoOperacion(true, "Paciente eliminado correctamente.");
+
+        } catch (SQLException e) {
+            return new ResultadoOperacion(false, "Error al eliminar paciente: " + e.getMessage());
+        }
+    }
+
+
+    public ResultadoOperacion actualizarMedico(String numeroColegiado, String nuevoNombre, String nuevaEspecialidad) {
+        try {
+            Medico medico = medicoRepository.buscarPorNumeroColegiado(numeroColegiado);
+
+            if (medico == null) {
+                return new ResultadoOperacion(false, "No existe un medico con ese numero colegiado.");
+            }
+
+            Medico medicoActualizado = new Medico(nuevoNombre, nuevaEspecialidad, numeroColegiado);
+            medicoRepository.actualizar(medicoActualizado);
+
+            return new ResultadoOperacion(true, "Medico actualizado correctamente.");
+
+        } catch (SQLException e) {
+            return new ResultadoOperacion(false, "Error al actualizar medico: " + e.getMessage());
+        }
+    }
+
+    public ResultadoOperacion eliminarMedicoPorNumeroColegiado(String numeroColegiado) {
+        try {
+            Medico medico = medicoRepository.buscarPorNumeroColegiado(numeroColegiado);
+
+            if (medico == null) {
+                return new ResultadoOperacion(false, "No existe un medico con ese numero colegiado.");
+            }
+
+            List<Cita> citasMedico = citaRepository.buscarPorNumeroColegiado(numeroColegiado);
+
+            if (!citasMedico.isEmpty()) {
+                return new ResultadoOperacion(false, "No se puede eliminar el medico porque tiene citas registradas.");
+            }
+
+            medicoRepository.eliminarPorNumeroColegiado(numeroColegiado);
+
+            return new ResultadoOperacion(true, "Medico eliminado correctamente.");
+
+        } catch (SQLException e) {
+            return new ResultadoOperacion(false, "Error al eliminar medico: " + e.getMessage());
+        }
+    }
 }

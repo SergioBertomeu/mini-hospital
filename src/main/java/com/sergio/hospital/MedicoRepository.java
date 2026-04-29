@@ -9,14 +9,14 @@ import java.util.List;
 
 public class MedicoRepository {
 
-    public void guardar (Medico medico) throws SQLException{
+    public void guardar(Medico medico) throws SQLException {
         String sql = """
                 INSERT INTO medicos (numero_colegiado, nombre, especialidad)
                 VALUES (?, ?, ?)
                 """;
 
-        try(Connection connection = DatabaseManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)){
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, medico.getNumeroColegiado());
             statement.setString(2, medico.getNombre());
@@ -26,21 +26,21 @@ public class MedicoRepository {
         }
     }
 
-    public Medico buscarPorNumeroColegiado(String numeroColegiado) throws SQLException{
+    public Medico buscarPorNumeroColegiado(String numeroColegiado) throws SQLException {
         String sql = """
                 SELECT numero_colegiado, nombre, especialidad
                 FROM medicos
                 WHERE numero_colegiado = ?
                 """;
 
-        try(Connection connection = DatabaseManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql)){
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, numeroColegiado);
 
-            try(ResultSet resultSet = statement.executeQuery()){
+            try (ResultSet resultSet = statement.executeQuery()) {
 
-                if (resultSet.next()){
+                if (resultSet.next()) {
                     String numeroEncontrado = resultSet.getString("numero_colegiado");
                     String nombre = resultSet.getString("nombre");
                     String especialidad = resultSet.getString("especialidad");
@@ -49,9 +49,9 @@ public class MedicoRepository {
                 }
             }
         }
+
         return null;
     }
-
 
     public List<Medico> buscarTodos() throws SQLException {
         List<Medico> medicos = new ArrayList<>();
@@ -78,5 +78,35 @@ public class MedicoRepository {
         return medicos;
     }
 
+    public void actualizar(Medico medico) throws SQLException {
+        String sql = """
+                UPDATE medicos
+                SET nombre = ?, especialidad = ?
+                WHERE numero_colegiado = ?
+                """;
 
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, medico.getNombre());
+            statement.setString(2, medico.getEspecialidad());
+            statement.setString(3, medico.getNumeroColegiado());
+
+            statement.executeUpdate();
+        }
+    }
+
+    public void eliminarPorNumeroColegiado(String numeroColegiado) throws SQLException {
+        String sql = """
+                DELETE FROM medicos
+                WHERE numero_colegiado = ?
+                """;
+
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, numeroColegiado);
+            statement.executeUpdate();
+        }
+    }
 }

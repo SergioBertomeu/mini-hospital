@@ -164,4 +164,30 @@ public class CitaRepository {
 
         return new Cita(id, paciente, medico, fecha);
     }
+
+    public List<Cita> buscarPorNumeroColegiado(String numeroColegiado) throws SQLException {
+        List<Cita> citas = new ArrayList<>();
+
+        String sql = """
+            SELECT id, dni_paciente, numero_colegiado, fecha
+            FROM citas
+            WHERE numero_colegiado = ?
+            ORDER BY fecha ASC
+            """;
+
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, numeroColegiado);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Cita cita = convertirFilaEnCita(resultSet);
+                    citas.add(cita);
+                }
+            }
+        }
+
+        return citas;
+    }
 }

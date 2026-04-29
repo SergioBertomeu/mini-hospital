@@ -9,14 +9,14 @@ import java.util.List;
 
 public class PacienteRepository {
 
-    public void guardar (Paciente paciente) throws SQLException{
+    public void guardar(Paciente paciente) throws SQLException {
         String sql = """
                 INSERT INTO pacientes (dni, nombre, edad)
                 VALUES (?, ?, ?)
                 """;
 
         try (Connection connection = DatabaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, paciente.getDni());
             statement.setString(2, paciente.getNombre());
@@ -26,7 +26,7 @@ public class PacienteRepository {
         }
     }
 
-    public Paciente buscarPorDni (String dni) throws SQLException{
+    public Paciente buscarPorDni(String dni) throws SQLException {
         String sql = """
                 SELECT dni, nombre, edad
                 FROM pacientes
@@ -34,13 +34,13 @@ public class PacienteRepository {
                 """;
 
         try (Connection connection = DatabaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, dni);
 
-            try(ResultSet resultSet = statement.executeQuery()){
+            try (ResultSet resultSet = statement.executeQuery()) {
 
-                if (resultSet.next()){
+                if (resultSet.next()) {
                     String dniEncontrado = resultSet.getString("dni");
                     String nombre = resultSet.getString("nombre");
                     int edad = resultSet.getInt("edad");
@@ -49,10 +49,11 @@ public class PacienteRepository {
                 }
             }
         }
+
         return null;
     }
 
-    public List<Paciente> buscarTodos() throws SQLException{
+    public List<Paciente> buscarTodos() throws SQLException {
         List<Paciente> pacientes = new ArrayList<>();
 
         String sql = """
@@ -61,10 +62,10 @@ public class PacienteRepository {
                 """;
 
         try (Connection connection = DatabaseManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
-        ResultSet resultSet = statement.executeQuery()){
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 String dni = resultSet.getString("dni");
                 String nombre = resultSet.getString("nombre");
                 int edad = resultSet.getInt("edad");
@@ -75,6 +76,37 @@ public class PacienteRepository {
         }
 
         return pacientes;
+    }
 
+    public void actualizar(Paciente paciente) throws SQLException {
+        String sql = """
+                UPDATE pacientes
+                SET nombre = ?, edad = ?
+                WHERE dni = ?
+                """;
+
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, paciente.getNombre());
+            statement.setInt(2, paciente.getEdad());
+            statement.setString(3, paciente.getDni());
+
+            statement.executeUpdate();
+        }
+    }
+
+    public void eliminarPorDni(String dni) throws SQLException {
+        String sql = """
+                DELETE FROM pacientes
+                WHERE dni = ?
+                """;
+
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, dni);
+            statement.executeUpdate();
+        }
     }
 }
