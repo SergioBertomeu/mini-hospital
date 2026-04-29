@@ -1,4 +1,11 @@
-package com.sergio.hospital;
+package com.sergio.hospital.service;
+
+import com.sergio.hospital.model.Cita;
+import com.sergio.hospital.model.Medico;
+import com.sergio.hospital.model.Paciente;
+import com.sergio.hospital.repository.CitaRepository;
+import com.sergio.hospital.repository.MedicoRepository;
+import com.sergio.hospital.repository.PacienteRepository;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;

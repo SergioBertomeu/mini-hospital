@@ -1,4 +1,4 @@
-package com.sergio.hospital;
+package com.sergio.hospital.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

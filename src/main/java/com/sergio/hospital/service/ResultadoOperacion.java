@@ -1,4 +1,4 @@
-package com.sergio.hospital;
+package com.sergio.hospital.service;
 
 public class ResultadoOperacion {
 

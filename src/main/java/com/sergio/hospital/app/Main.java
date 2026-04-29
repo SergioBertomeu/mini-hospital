@@ -1,4 +1,11 @@
-package com.sergio.hospital;
+package com.sergio.hospital.app;
+
+import com.sergio.hospital.database.DatabaseManager;
+import com.sergio.hospital.model.Cita;
+import com.sergio.hospital.model.Medico;
+import com.sergio.hospital.model.Paciente;
+import com.sergio.hospital.service.HospitalService;
+import com.sergio.hospital.service.ResultadoOperacion;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

@@ -1,4 +1,7 @@
-package com.sergio.hospital;
+package com.sergio.hospital.repository;
+
+import com.sergio.hospital.database.DatabaseManager;
+import com.sergio.hospital.model.Medico;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
