@@ -19,7 +19,7 @@ public class Main {
 
         do {
             mostrarMenu();
-            opcion = leerOpcionMenu();
+            opcion = leerEnteroValido("Elige opción: ");
 
             switch (opcion) {
                 case 1:
@@ -53,7 +53,7 @@ public class Main {
                     System.out.println("Saliendo del sistema...");
                     break;
                 default:
-                    System.out.println("Opción inválida. Elige una opción del menú");
+                    System.out.println("Opción inválida. Elige una opción del menú.");
             }
 
         } while (opcion != 0);
@@ -76,18 +76,6 @@ public class Main {
         System.out.println("==============================");
     }
 
-    public static int leerOpcionMenu() {
-        while (!scanner.hasNextInt()) {
-            System.out.println("Introduce un número válido.");
-            scanner.nextLine();
-            System.out.print("Elige opción: ");
-        }
-
-        int opcion = scanner.nextInt();
-        scanner.nextLine();
-        return opcion;
-    }
-
     public static String leerTextoNoVacio(String mensaje) {
         String texto;
 
@@ -104,18 +92,18 @@ public class Main {
         return texto;
     }
 
-    public static int leerEnteroValido(String mensaje){
+    public static int leerEnteroValido(String mensaje) {
         int numero = 0;
         boolean valido = false;
 
-        while (!valido){
-            System.out.println(mensaje);
+        while (!valido) {
+            System.out.print(mensaje);
 
-            if (scanner.hasNextInt()){
+            if (scanner.hasNextInt()) {
                 numero = scanner.nextInt();
-                scanner.hasNextInt();
+                scanner.nextLine();
                 valido = true;
-            }else {
+            } else {
                 System.out.println("Introduce un número válido.");
                 scanner.nextLine();
             }
@@ -124,47 +112,38 @@ public class Main {
         return numero;
     }
 
-
-    public static int leerEnteroPositivo(String mensaje){
+    public static int leerEnteroPositivo(String mensaje) {
         int numero;
         boolean valido = false;
 
         do {
             numero = leerEnteroValido(mensaje);
 
-            if (numero > 0){
+            if (numero > 0) {
                 valido = true;
-            }else {
+            } else {
                 System.out.println("El número debe ser mayor que 0.");
             }
 
-        }while (!valido);
+        } while (!valido);
 
         return numero;
     }
 
     public static int leerEdadValida() {
-        int edad = 0;
+        int edad;
         boolean edadValida = false;
 
-        while (!edadValida) {
-            System.out.print("Edad: ");
+        do {
+            edad = leerEnteroValido("Edad: ");
 
-            if (scanner.hasNextInt()) {
-                edad = scanner.nextInt();
-                scanner.nextLine();
-
-                if (edad >= 0) {
-                    edadValida = true;
-                } else {
-                    System.out.println("La edad no puede ser negativa.");
-                }
-
+            if (edad >= 0) {
+                edadValida = true;
             } else {
-                System.out.println("Introduce un número válido.");
-                scanner.nextLine();
+                System.out.println("La edad no puede ser negativa.");
             }
-        }
+
+        } while (!edadValida);
 
         return edad;
     }
@@ -176,7 +155,7 @@ public class Main {
 
         while (!fechaValida) {
             System.out.print("Introduce fecha (dd/MM/yyyy HH:mm): ");
-            String texto = scanner.nextLine();
+            String texto = scanner.nextLine().trim();
 
             try {
                 fecha = LocalDateTime.parse(texto, formatter);
@@ -206,6 +185,7 @@ public class Main {
         if (pacientes.isEmpty()) {
             System.out.println("No hay pacientes registrados.");
         } else {
+            System.out.println("\n--- LISTA DE PACIENTES ---");
             for (Paciente p : pacientes) {
                 System.out.println(p);
             }
@@ -229,6 +209,7 @@ public class Main {
         if (medicos.isEmpty()) {
             System.out.println("No hay medicos registrados.");
         } else {
+            System.out.println("\n--- LISTA DE MEDICOS ---");
             for (Medico m : medicos) {
                 System.out.println(m);
             }
@@ -250,6 +231,7 @@ public class Main {
         if (citas.isEmpty()) {
             System.out.println("No hay citas registradas.");
         } else {
+            System.out.println("\n--- LISTA DE CITAS ---");
             for (Cita c : citas) {
                 System.out.println(c);
             }
@@ -264,12 +246,12 @@ public class Main {
         if (citas.isEmpty()) {
             System.out.println("No se encontraron citas para ese paciente.");
         } else {
+            System.out.println("\n--- CITAS DEL PACIENTE ---");
             for (Cita c : citas) {
                 System.out.println(c);
             }
         }
     }
-
 
     public static void cancelarCitaPorId() {
         int id = leerEnteroPositivo("Introduce el ID de la cita a cancelar: ");
